@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<bean id="samsungTv" class="org.comstudy21.myapp.tv.Samsung"></bean>
+	
+	
+	<!-- <bean id="lgTv" class="org.comstudy21.myapp.tv.Lg"></bean> -->
+	
+	<bean id="lgTv" class="org.comstudy21.myapp.tv.Lg">
+		<constructor-arg ref="samsung"></constructor-arg>
+	</bean>
+	
+	<bean id="samsung" class="org.comstudy21.myapp.speaker.SamsungSpeaker"></bean>
+</beans>
