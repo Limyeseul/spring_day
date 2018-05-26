@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<bean id="samsungTv" class="org.comstudy21.myapp.tv.Samsung"></bean>
+	
+	
+	<!-- <bean id="lgTv" class="org.comstudy21.myapp.tv.Lg"></bean> -->
+	
+	<!-- Bean 앨리먼트 속성 
+		init-method		: 초기화 생성자
+		destroy-method  : 소멸자
+		lazy-init		
+	-->
+	<bean id="lgTv" class="org.comstudy21.myapp.tv.Lg" init-method="initMethod" destroy-method="close"></bean>
+</beans>
