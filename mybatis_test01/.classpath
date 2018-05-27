@@ -2,7 +2,7 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
-	<classpathentry kind="lib" path="E:/spring framwork_yslim/yslim_lib/mybatis-3.3.1.jar"/>
-	<classpathentry kind="lib" path="E:/spring framwork_yslim/yslim_lib/h2-1.4.197.jar"/>
+	<classpathentry kind="lib" path="/Users/yslim/Dev/lib/h2-1.4.197.jar"/>
+	<classpathentry kind="lib" path="/Users/yslim/Dev/lib/mybatis-3.3.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
