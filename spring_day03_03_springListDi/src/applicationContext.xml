@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd">
+
+	<bean id="saram1" class="org.comstudy21.saram.model.Saram">
+		<constructor-arg value="kim"></constructor-arg>
+		<constructor-arg value="gildong"></constructor-arg>
+		<constructor-arg value="22"></constructor-arg>
+	</bean>
+	
+	<bean id="saram2" class="org.comstudy21.saram.model.Saram">
+		<constructor-arg value="hong"></constructor-arg>
+		<constructor-arg value="gilja"></constructor-arg>
+		<constructor-arg value="32"></constructor-arg>
+	</bean>
+	
+	<bean id="saram3" class="org.comstudy21.saram.model.Saram">
+		<constructor-arg value="lee"></constructor-arg>
+		<constructor-arg value="mimi"></constructor-arg>
+		<constructor-arg value="88"></constructor-arg>
+	</bean>
+	
+	<bean id="collectionBean" class="org.comstudy21.saram.di.CollectionBean">
+		<property name="saramList">
+			<list>
+				<ref bean="saram1" />
+				<ref bean="saram2" />
+				<ref bean="saram3" />
+			</list>
+		</property>
+	</bean>
+</beans>
