@@ -7,178 +7,164 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.border.Border;
-
+import org.comstudy21.myapp.board.service.BoardService;
 import org.comstudy21.myapp.board.vo.BoardVo;
 import org.comstudy21.myapp.util.JdbcUtil;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class BoardDao implements Dao {
 	private Connection conn;
 	private PreparedStatement stmt;
 	private ResultSet rs;
-	
+
+	/* (non-Javadoc)
+	 * @see org.comstudy21.myapp.board.dao.BoardService#insertBoard(org.comstudy21.myapp.board.vo.BoardVo)
+	 */
 	@Override
 	public void insertBoard(BoardVo vo) {
+		System.out.println("vo ====> " + vo);
 		try {
-			conn = JdbcUtil.getconnection();
-			stmt = conn.prepareStatement(INSERT_BOARD);
+			conn = JdbcUtil.getConnection();
+			stmt = conn.prepareStatement(BOARD_INSERT);
 			stmt.setString(1, vo.getTitle());
 			stmt.setString(2, vo.getWriter());
 			stmt.setString(3, vo.getContent());
-			
-			int count = stmt.executeUpdate();
-			
-			if(count != 0) {
-				System.out.println("처리 성공");
+			int cnt = stmt.executeUpdate();
+			if(cnt != 0) {
+				System.out.println("입력 처리 성공!");
 				conn.commit();
 			} else {
-				System.out.println("처리 실패");
+				System.out.println("입력 처리 실패!");
+				conn.rollback();
 			}
-			
-			
 		} catch (SQLException e) {
+			e.printStackTrace();
 			try {
 				conn.rollback();
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 			}
-			e.printStackTrace();
 		} finally {
-			JdbcUtil.close(conn, stmt, rs);
+			JdbcUtil.close(null, stmt, conn);
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see org.comstudy21.myapp.board.dao.BoardService#updateBoard(org.comstudy21.myapp.board.vo.BoardVo)
+	 */
 	@Override
 	public void updateBoard(BoardVo vo) {
 		try {
-			conn = JdbcUtil.getconnection();
-			stmt = conn.prepareStatement(UPDATE_BOARD);
+			conn = JdbcUtil.getConnection();
+			stmt = conn.prepareStatement(BOARD_UPDATE);
 			stmt.setString(1, vo.getTitle());
 			stmt.setString(2, vo.getContent());
 			stmt.setInt(3, vo.getSeq());
-			
-			int count = stmt.executeUpdate();
-			
-			if(count != 0) {
-				System.out.println("처리 성공");
+			int cnt = stmt.executeUpdate();
+			if(cnt!=0){
+				System.out.println("수정 처리 성공!");
 				conn.commit();
 			} else {
-				System.out.println("처리 실패");
+				conn.rollback();
 			}
-			
 		} catch (SQLException e) {
+			e.printStackTrace();
 			try {
 				conn.rollback();
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 			}
-			e.printStackTrace();
 		} finally {
-			JdbcUtil.close(conn, stmt, rs);
+			JdbcUtil.close(null, stmt, conn);
 		}
+		
 	}
 
+	/* (non-Javadoc)
+	 * @see org.comstudy21.myapp.board.dao.BoardService#deleteBoard(org.comstudy21.myapp.board.vo.BoardVo)
+	 */
 	@Override
 	public void deleteBoard(BoardVo vo) {
+		conn = JdbcUtil.getConnection();
 		try {
-			conn = JdbcUtil.getconnection();
-			stmt = conn.prepareStatement(DELETE_BOARD);
+			stmt = conn.prepareStatement(BOARD_DELETE);
 			stmt.setInt(1, vo.getSeq());
-			
-			int count = stmt.executeUpdate();
-			
-			if(count != 0) {
-				System.out.println("처리 성공");
+			int cnt = stmt.executeUpdate();
+			if(cnt!=0) {
+				System.out.println("수정 처리 완료!");
 				conn.commit();
 			} else {
-				System.out.println("처리 실패");
+				System.out.println("수정 처리 실패!");
+				conn.rollback();
 			}
-			
 		} catch (SQLException e) {
+			e.printStackTrace();
 			try {
 				conn.rollback();
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 			}
-			e.printStackTrace();
 		} finally {
-			JdbcUtil.close(conn, stmt, rs);
+			JdbcUtil.close(null, stmt, conn);
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see org.comstudy21.myapp.board.dao.BoardService#getBoard(org.comstudy21.myapp.board.vo.BoardVo)
+	 */
 	@Override
 	public BoardVo getBoard(BoardVo vo) {
-		BoardVo info = null;
-
+		BoardVo board = null;
 		try {
-			conn = JdbcUtil.getconnection();
-			stmt = conn.prepareStatement(SELECT_BOARD);
+			conn = JdbcUtil.getConnection();
+			stmt = conn.prepareStatement(BOARD_GET);
 			stmt.setInt(1, vo.getSeq());
-			
 			rs = stmt.executeQuery();
-			
-			while(rs.next()) {
-				info = new BoardVo();
-				info.setSeq(rs.getInt("SEQ"));
-				info.setTitle(rs.getString("TITLE"));
-				info.setWriter(rs.getString("WRITER"));
-				info.setContent(rs.getString("CONTENT"));
-				info.setRegDate(rs.getDate("REGDATE"));
-				info.setCnt(rs.getInt("CNT"));
+			if(rs.next()) {
+				board = new BoardVo();
+				board.setSeq(rs.getInt("seq"));
+				board.setTitle(rs.getString(2));
+				board.setWriter(rs.getString(3));
+				board.setContent(rs.getString(4));
+				board.setRegDate(rs.getDate(5));
+				board.setCnt(rs.getInt(6));
 			}
-			
-			return info;
 		} catch (SQLException e) {
-			try {
-				conn.rollback();
-			} catch (SQLException e1) {
-				e1.printStackTrace();
-			}
 			e.printStackTrace();
 		} finally {
-			JdbcUtil.close(conn, stmt, rs);
+			JdbcUtil.close(rs, stmt, conn);
 		}
-		return info;
+		return board;
 	}
 
+	/* (non-Javadoc)
+	 * @see org.comstudy21.myapp.board.dao.BoardService#getBoardList(org.comstudy21.myapp.board.vo.BoardVo)
+	 */
 	@Override
 	public List<BoardVo> getBoardList(BoardVo vo) {
-		List<BoardVo> listInfo = null;
-		BoardVo info = null;
-
+		List<BoardVo> list = new ArrayList<>();
+		conn = JdbcUtil.getConnection();
 		try {
-			conn = JdbcUtil.getconnection();
-			stmt = conn.prepareStatement(SELECT_BOARD);
-			stmt.setInt(1, vo.getSeq());
-			
+			stmt = conn.prepareStatement(BOARD_LIST);
 			rs = stmt.executeQuery();
-			
-			listInfo = new ArrayList<BoardVo>();
-			
 			while(rs.next()) {
-				info = new BoardVo();
-				info.setSeq(rs.getInt("SEQ"));
-				info.setTitle(rs.getString("TITLE"));
-				info.setWriter(rs.getString("WRITER"));
-				info.setContent(rs.getString("CONTENT"));
-				info.setRegDate(rs.getDate("REGDATE"));
-				info.setCnt(rs.getInt("CNT"));
-				
-				listInfo.add(info);
+				BoardVo board = new BoardVo();
+				board.setSeq(rs.getInt("seq"));
+				board.setTitle(rs.getString(2));
+				board.setWriter(rs.getString(3));
+				board.setContent(rs.getString(4));
+				board.setRegDate(rs.getDate(5));
+				board.setCnt(rs.getInt(6));
+				list.add(board);
 			}
-			
-			return listInfo;
 		} catch (SQLException e) {
-			try {
-				conn.rollback();
-			} catch (SQLException e1) {
-				e1.printStackTrace();
-			}
 			e.printStackTrace();
 		} finally {
-			JdbcUtil.close(conn, stmt, rs);
+			JdbcUtil.close(rs, stmt, conn);
 		}
-		return listInfo;
+		
+		return list;
 	}
 	
 }
