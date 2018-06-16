@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="BoardMapper">
+
+	<select id="getBoard" resultType="BoardVo">
+		select * from board where seq=#{seq}
+	</select>
+
+	<!-- <resultMap type="#modelname" id="YourResultSet">
+		<id property="param1" column="columnname1" />
+		<result property="param2" column="columnname2" />
+		<result property="param3" column="columnname3" />
+	</resultMap> -->
+
+	<select id="getBoardList" resultType="BoardVo">
+		select * from board order by SEQ desc
+	</select>
+
+	<insert id="insertBoard" parameterType="BoardVo">
+		insert into board(SEQ,title,writer,content) 
+		values( (select nvl(max(SEQ),0)+1 from board),#{title},#{writer},#{content})
+	</insert>
+
+	<update id="updateBoard" parameterType="BoardVo">
+		update board 
+		set tittle=#{tittle},content=#{content},cnt=#{cnt} 
+		where seq=#{seq}
+	</update>
+
+	<delete id="deleteBoard" parameterType="BoardVo">
+		delete from board where seq=#{seq}
+	</delete>
+
+</mapper>
